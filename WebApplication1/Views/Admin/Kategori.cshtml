@@ -1,0 +1,228 @@
+﻿@{
+    ViewData["Title"] = "Kategori";
+    Layout = "~/Views/Shared/_AdminLTE.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-4 offset-4" >
+        <h1> <span class="alert alert-light"> Kategori Menüsü  </span></h1>
+    </div>
+</div>
+
+<br />
+<br />
+<br />
+
+
+
+<div class="row mt-10"  >
+    <div class="col-md-12">
+        <table class="table table-hover" id="habertable">
+            <thead>
+                <tr>
+                    <td>Sıra No</td>
+                    <td>Kategori Adı</td>
+                    <td>İslemler</td>
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr>
+                    <td>a</td>
+                    <td>a</td>
+                    <td>a</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4" style="margin-top:20px;">
+            <div class="card-body">
+                <div class="table">
+                    <form>
+                        <input type="hidden" name="id" id="id" />
+
+                        <label>Yeni Kategori Adı</label>
+                        <input type="text" class="form-control" name="kategori" id="kategori" /><br />
+
+                        <button class="btn btn-success">Kategoriyi Güncelle</button>
+                        <button class="btn btn-danger">Kategoriyi Sil</button>
+
+                        <button class="btn btn-info" id="ekleButton">Yeni Kategori Ekle Ekle</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            kategorigetir();
+
+            function kategorigetir() {
+                $("#habertable tbody").empty();
+                $.ajax({
+                    url: "/Admin/KategoriGetir",
+                    type: "Get",
+                    data: {},
+                    success: function (data) {
+                        var i = 1;
+                        $.each(data, function (index, item) {
+                            var tr = $('<tr id="' + item.id + '"></tr>');
+                            tr.append('<td>' + i + '</td>');
+                            tr.append('<td>' + item.kategoriBaslik + '</td>');
+
+                            var btnGuncelle = $('<button type="button" id="duzenleButton" class="btn btn-secondary">Düzenle</button>');
+                            btnGuncelle.click(function () {
+                                btnGuncelleClick(item.id, item.kategoriBaslik);
+                            });
+                            var td = $('<td></td>');
+                            td.append(btnGuncelle);
+                            tr.append(td);
+
+                            $("#habertable tbody").append(tr);
+                            i++;
+                        });
+                    }
+                });
+            }
+
+            function btnGuncelleClick(id, kategori) {
+                $("#id").val(id);
+                $("#kategori").val(kategori);
+            }
+
+
+
+
+
+            $("button.btn-success").click(function () {
+                event.preventDefault();
+
+                var id = $("#id").val();
+                var kategori = $("#kategori").val();
+
+                if (kategori.trim() === "") {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata!',
+                        text: 'Lütfen Düzenle deyip güncelleme yapınız.',
+                    });
+                    return;
+                }
+                if (id.trim() === "") {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata!',
+                        text: 'Yanlış Güncelleme Yap Buttonuna Bastınız.',
+                    });
+                    return;
+                }
+
+
+
+
+                $.ajax({
+                    url: "/Admin/KategoriGuncelle",
+                    type: "POST",
+                    data: { id: id, kategoriBaslik: kategori },
+                    success: function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Başarılı!',
+                            text: 'Veri güncelleme işlemi başarıyla tamamlandı.',
+                        });
+                        $("#id").val("");
+                        $("#kategori").val("");
+                        kategorigetir();
+                    },
+                    error: function () {
+                        console.error("Veri güncelleme işleminde hata oluştu.");
+                    }
+                });
+            });
+
+            $("button.btn-danger").click(function () {
+                event.preventDefault();
+
+                var id = $("#id").val();
+                var kategori = $("#kategori").val();
+                if (kategori.trim() === "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata!',
+                        text: 'Araç marka Lütfen Düzenle deyip silme işlemi yapınız.',
+                    });
+                    return;
+                }
+
+                $.ajax({
+                    url: "/Admin/KategoriSil",
+                    type: "POST",
+                    data: { id: id, kategoriBaslik: kategori },
+                    success: function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Başarılı!',
+                            text: 'Veri Silme işlemi başarıyla tamamlandı.',
+                        });
+                        $("#id").val("");
+                        $("#kategori").val("");
+                        kategorigetir();
+                    },
+                    error: function () {
+                        console.error("Veri Silme işleminde hata oluştu.");
+                    }
+                });
+            });
+            $("button.btn-info").click(function () {
+                event.preventDefault();
+
+                var id = $("#id").val();
+                var kategori = $("#kategori").val();
+
+
+                if (kategori.trim() === "") {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata!',
+                        text: 'Yeni Kategori alanı boş olamaz.',
+                    });
+                    return;
+                }
+
+                $.ajax({
+                    url: "/Admin/KategoriEkle",
+                    type: "POST",
+                    data: { kategoriBaslik: kategori },
+                    success: function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Başarılı!',
+                            text: 'Veri Ekleme işlemi başarıyla tamamlandı.',
+                        });
+                        $("#id").val("");
+                        $("#kategori").val("");
+                        kategorigetir();
+                    },
+                    error: function () {
+                        console.error("Veri kaydetme işleminde hata oluştu.");
+                    }
+                });
+            });
+        });
+
+    </script>
+}
+

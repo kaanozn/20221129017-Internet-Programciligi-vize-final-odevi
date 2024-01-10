@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "HaberGuncelle";
+    Layout = "~/Views/Shared/_AdminLTE.cshtml";
+}
+@model HaberViewModels
+
+<form asp-action="HaberGuncelle" asp-controller="Admin" enctype="multipart/form-data">
+    <input type="text" asp-for="HaberResimData" />
+    <input type="text" asp-for="Id" />
+    <br />
+    <div>
+        <label asp-for="HaberBaslik"></label>
+        <input class="form-control form-control-lg" asp-for="HaberBaslik" atype="text" placeholder="Haber Başlığını Giriniz" aria-label=".form-control-lg example">
+        <span asp-validation-for="HaberBaslik"></span>
+    </div>
+
+    <div>
+        <label asp-for="HaberDetay"></label>
+        <textarea rows="15" class="form-control" asp-for="HaberDetay" aria-label="Haber Detayı"></textarea>
+        <span asp-validation-for="HaberDetay" aria-label="Haber Detayı"></span>
+    </div>
+
+    <div>
+        <label asp-for="KategoriId"></label>
+        @Html.DropDownListFor(x=>x.KategoriId,(List<SelectListItem>)ViewBag.Kategori,new {@class="form-control",required="required"})
+        <span asp-validation-for="KategoriId" aria-label="Haber Detayı"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Güncelle </button>
+</form>

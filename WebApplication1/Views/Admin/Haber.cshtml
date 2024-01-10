@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "Haber";
+    Layout = "~/Views/Shared/_AdminLTE.cshtml";
+}
+@model List<HaberViewModels>
+<div class="container">
+    <div class="row" style="margin-bottom:3%">
+        <div class="col-md-4 offset-9">
+            <a class="btn btn-success" asp-action="HaberEkle" asp-controller="Admin"> Haber Ekle</a>
+        </div>
+    </div>
+    <div class="row mt-10">
+        <div class="col-md-12">
+            <table class="table table-hover" id="habertable">
+                <thead>
+                    <tr>
+                        <th>Sıra No</th>
+                        <th>Haber Başlık</th>
+                        <th>Haber Detay</th>
+                        <th>Haber Resim</th>
+                        <th>İşlemler</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td> @i </td>
+                            <td> @item.HaberBaslik.Substring(0,10).... </td>
+                            <td> @item.HaberDetay.Substring(0,30).... </td>
+                            <td> <img class="img-circle elevation-2" src="~/Haber/@item.HaberResimData" width="100px" height="100px">  </td>
+                            <td>
+                                <a asp-action="HaberGuncelle" asp-controller="Admin" asp-route-id="@item.Id" class="btn btn-dark">Düzenle</a>
+                                <a href="" class="btn btn-danger">Sil</a>
+                            </td>
+
+
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+

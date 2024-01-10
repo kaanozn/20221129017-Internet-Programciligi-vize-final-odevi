@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewData["Title"] = "Iletisim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="container">
+    <form class="row g-3 ">
+        <div class="col-md-6">
+            <label for="isim" class="form-label">İsminiz :</label>
+            <input type="text" class="form-control" name="Name" id="Name">
+        </div>
+        <div class="col-md-6">
+            <label for="soyadiniz" class="form-label">Soyadınız : </label>
+            <input type="text" class="form-control" id="Surname" name="Surname">
+        </div>
+        <div class="col-12">
+            <label for="mesajiniz" class="form-label">Mesajınz</label>
+            <textarea class="form-control" id="Message" name="Message"></textarea>
+        </div>
+        <div class="col-md-12">
+            <label for="email" class="form-label">Email : </label>
+            <input type="Email" class="form-control" id="Email" name="Email">
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-info">İletişime Gec</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+
+            $("button.btn-info").click(function () {
+                event.preventDefault();
+
+                var id = $("#id").val();
+                var Name = $("#Name").val();
+                var Surname = $("#Surname").val();
+                var Message = $("#Message").val();
+                var Email = $("#Email").val();
+
+                if (Name.trim() === "") {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata!',
+                        text: 'İsim alanı boş olamaz.',
+                    });
+                    return;
+                }
+                if (Surname.trim() === "") {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata!',
+                        text: 'Soyadı alanı boş olamaz.',
+                    });
+                    return;
+                }
+                if (Message.trim() === "") {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata!',
+                        text: 'Mesaj alanı boş olamaz.',
+                    });
+                    return;
+                }
+                if (Email.trim() === "") {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata!',
+                        text: 'Email alanı boş olamaz.',
+                    });
+                    return;
+                }
+
+                $.ajax({
+                    url: "/Home/MailGonder",
+                    type: "POST",
+                    data: { Name: Name, Surname: Surname, Message: Message, Email: Email },
+                    success: function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Başarılı!',
+                            text: 'Mesajınız işlemi başarıyla gönderild.',
+                        });
+                        $("#Name").val("");
+                        $("#Surname").val("");
+                        $("#Message").val("");
+                        $("#Email").val("");
+                    },
+                    error: function () {
+                        console.error("Bir hata oluştu.");
+                    }
+                });
+            });
+        });
+
+
+
+    </script>
+}
+
+

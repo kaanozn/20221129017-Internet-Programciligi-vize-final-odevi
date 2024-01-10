@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewData["Title"] = "HaberDetay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<HaberViewModels>
+
+
+
+<div class="container">
+    <div class="row">
+        @foreach(var item in Model)
+        {
+            <div class="col-md-4 offset-2">
+                <img src="~/Haber/@item.HaberResimData" width="800px" height="400px" alt="Açıklama metni">
+            </div>
+            <div class="col-md-8 offset-2">
+                <h1>@item.HaberBaslik</h1>
+                <p>@item.HaberDetay</p>
+            </div>
+            
+        }
+        
+    </div>
+</div>
